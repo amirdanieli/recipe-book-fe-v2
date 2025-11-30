@@ -5,12 +5,18 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>{recipe.title}</h2>
-      <div className={styles.container}>
-        <strong className={styles.detail}>Difficulty:</strong>
-        {recipe.difficulty}
-        <strong className={styles.detail}>Prep time: </strong>
-        {recipe.prepTimeMinutes}
+
+      <div className={styles.details}>
+        <div className={styles.row}>
+          <strong className={styles.label}>Difficulty:</strong>
+          <span className={styles.value}>{recipe.difficulty}</span>
+        </div>
+        <div className={styles.row}>
+          <strong className={styles.label}>Prep time:</strong>
+          <span className={styles.value}>{recipe.prepTimeMinutes} min</span>
+        </div>
       </div>
+
       <p className={styles["truncate-multi-line"]}>{recipe.story}</p>
     </div>
   );

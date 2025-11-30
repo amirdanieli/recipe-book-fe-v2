@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import styles from "./Categories.module.css";
+import styles from "./CategoriesList.module.css";
 
 const categories = [
   { id: 1, name: "Breakfast", count: 12 },
@@ -10,7 +10,7 @@ const categories = [
   { id: 6, name: "Drinks", count: 5 },
 ];
 
-const Categories = () => {
+const CategoriesList = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Categories</h1>
@@ -31,4 +31,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default CategoriesList;

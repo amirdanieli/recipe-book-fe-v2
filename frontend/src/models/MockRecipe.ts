@@ -1,37 +1,40 @@
-import type { Recipe } from "../models/Recipe";
-import type { Ingredient } from "../models/Ingredient";
+import type { Recipe } from "./Recipe";
+import type { Ingredient } from "./Ingredient";
 
-export const mockRecipe: Recipe = {
-  id: "r-001",
-  title: "Classic Pancakes",
-  slug: "classic-pancakes",
-  story:
-    "A simple, fluffy pancake recipe that's quick to make and perfect for weekend breakfasts. Adapted from a family recipe — works well with fresh berries or maple syrup.",
+const now = new Date().toISOString();
+
+const mk = (n: number, title: string, slug: string, categoryId: string, difficulty: Recipe["difficulty"], prep = 20, img = `/images/${slug}.jpg`): Recipe => ({
+  id: `r-${String(n).padStart(3, "0")}`,
+  title,
+  slug,
+  story: `${title} — simple mock recipe for testing.`,
   ingredients: [
-    { name: "All-purpose flour", quantity: "1 1/2", unit: "cups" } as Ingredient,
-    { name: "Baking powder", quantity: "2", unit: "teaspoons" } as Ingredient,
-    { name: "Sugar", quantity: "1", unit: "tablespoon" } as Ingredient,
-    { name: "Salt", quantity: "1/2", unit: "teaspoon" } as Ingredient,
-    { name: "Milk", quantity: "1 1/4", unit: "cups" } as Ingredient,
-    { name: "Egg", quantity: "1", unit: "large" } as Ingredient,
-    { name: "Unsalted butter", quantity: "3", unit: "tablespoons (melted)" } as Ingredient,
+    { name: "Ingredient A", quantity: "1", unit: "unit" } as Ingredient,
+    { name: "Ingredient B", quantity: "2", unit: "units" } as Ingredient,
   ],
-  steps: [
-    "In a large bowl whisk together flour, baking powder, sugar, and salt.",
-    "In another bowl whisk milk, egg, and melted butter until combined.",
-    "Pour wet ingredients into dry and stir until just combined; some lumps are OK.",
-    "Heat a non-stick skillet over medium and grease lightly. Pour 1/4 cup batter per pancake.",
-    "Cook until bubbles form on the surface, flip, and cook until golden on the other side.",
-    "Serve warm with butter and maple syrup or fresh fruit.",
-  ],
-  prepTimeMinutes: 15,
-  prepTimeNote: "includes mixing; does not include optional resting",
-  difficulty: "Easy",
-  categoryId: "c-breakfast",
-  imageUrl: "../assets/pancake.jpg",
-  createdBy: "DemoUser",
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-};
+  steps: ["Mix ingredients.", "Cook or assemble.", "Serve."],
+  prepTimeMinutes: prep,
+  difficulty,
+  categoryId,
+  imageUrl: img,
+  createdBy: "MockUser",
+  createdAt: now,
+  updatedAt: now,
+});
 
-export default mockRecipe;
+export const mockRecipes: Recipe[] = [
+  mk(1, "Classic Pancakes", "classic-pancakes", "c-breakfast", "Easy", 15),
+  mk(2, "Avocado Toast", "avocado-toast", "c-breakfast", "Easy", 10),
+  mk(3, "Chicken Caesar Salad", "chicken-caesar-salad", "c-lunch", "Medium", 20),
+  mk(4, "BLT Sandwich", "blt-sandwich", "c-lunch", "Easy", 12),
+  mk(5, "Spaghetti Bolognese", "spaghetti-bolognese", "c-dinner", "Medium", 40),
+  mk(6, "Pan-Seared Salmon", "pan-seared-salmon", "c-dinner", "Hard", 30),
+  mk(7, "Chocolate Brownies", "chocolate-brownies", "c-dessert", "Medium", 45),
+  mk(8, "Lemon Tart", "lemon-tart", "c-dessert", "Hard", 60),
+  mk(9, "Roasted Chickpeas", "roasted-chickpeas", "c-snacks", "Easy", 25),
+  mk(10, "Trail Mix", "trail-mix", "c-snacks", "Easy", 5),
+  mk(11, "Strawberry Smoothie", "strawberry-smoothie", "c-drinks", "Easy", 5),
+  mk(12, "Iced Coffee", "iced-coffee", "c-drinks", "Easy", 5),
+];
+
+export default mockRecipes;
