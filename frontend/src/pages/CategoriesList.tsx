@@ -14,7 +14,7 @@ const CategoriesList = () => {
   return (
     <div className={"content-container"}>
       <h1 className={styles.title}>Categories</h1>
-      <div className={styles.list}>
+      <div className={`list ${styles["categories-list"]}`}>
         {categories.map((category) => (
           <Link
             key={category.id}

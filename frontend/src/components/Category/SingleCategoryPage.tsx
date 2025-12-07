@@ -13,7 +13,7 @@ const SingleCategoryPage = () => {
   return (
     <div className={"content-container"}>
       <h1 className={styles.title}>{categoryName}</h1>
-      <div className={styles.list}>
+      <div className={"list"}>
         {recipes.map((r) => (
           <Link
             key={r.id}

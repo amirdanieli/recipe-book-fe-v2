@@ -2,7 +2,7 @@
   flex: 1;
   width: 100%;
   margin: 16px;
-  overflow-y: auto;
+  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   padding: 8px 0;
 }
@@ -115,4 +115,15 @@
   .storyContainer {
     width: 100%;
   }
+
+  .adminControls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  justify-content: flex-end; /* Puts buttons on the right */
+}
+
+.editButton, .deleteButton {
+  padding: 8px
+}
 }

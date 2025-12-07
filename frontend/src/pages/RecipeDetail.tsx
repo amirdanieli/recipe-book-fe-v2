@@ -1,11 +1,16 @@
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import type { Recipe } from "../models/Recipe";
 import mockRecipes from "../models/MockRecipe";
 import styles from "./RecipeDetail.module.css";
+import { useAuth } from "../hooks/useAuth";
 
 const RecipeDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const auth = useAuth();
+  const isAdmin = auth?.isAdmin;
 
   const stateRecipe = (location.state as { recipe?: Recipe } | null)?.recipe;
 
@@ -13,11 +18,39 @@ const RecipeDetail = () => {
   const recipe =
     stateRecipe ?? mockRecipes.find((r) => r.slug === recipeSlug) ?? null;
 
-  if (!recipe) return <h1>Recipe not found</h1>;
+  const handleEdit = () => {
+    navigate(`/edit/${encodeURIComponent(recipe.slug)}`);
+  };
+
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete "${recipe.title}"?`)) {
+      console.log("Deleting recipe:", recipe.id);
+      // TODO: Call API to delete
+      navigate("/"); // Redirect home after delete
+    }
+  };
+
+  if (!recipe)
+    return (
+      <div className={"content-container"}>
+        <h1>Recipe not found</h1>
+      </div>
+    );
 
   return (
     <div className={"content-container"}>
       <div className={styles.container}>
+        {isAdmin && (
+          <div className={styles.adminControls}>
+            <button onClick={handleEdit} className={styles.editButton}>
+              Edit Recipe
+            </button>
+            <button onClick={handleDelete} className={styles.deleteButton}>
+              Delete
+            </button>
+          </div>
+        )}
+
         <h1 className={styles.title}>{recipe.title}</h1>
         <div className={styles.row}>
           <strong className={styles.label}>Difficulty:</strong>
