@@ -1,6 +1,7 @@
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import type { Recipe } from "../models/Recipe";
 import mockRecipes from "../models/MockRecipe";
+import { categories } from "../models/Category";
 import styles from "./RecipeDetail.module.css";
 import { useAuth } from "../hooks/useAuth";
 
@@ -88,6 +89,21 @@ const RecipeDetail = () => {
             </ol>
           </div>
         </div>
+        <button
+        className={"button"}
+          onClick={() => {
+            const catName = (categories || []).find(
+              (c) => String(c.id) === String(recipe.categoryId)
+            )?.name;
+            if (catName) {
+              navigate(`/categories/${encodeURIComponent(catName)}`);
+            } else {
+              navigate("/categories");
+            }
+          }}
+        >
+          Back
+        </button>
       </div>
     </div>
   );

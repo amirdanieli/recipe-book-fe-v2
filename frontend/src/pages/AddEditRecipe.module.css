@@ -52,21 +52,6 @@ textarea.input {
   margin-top: 1rem;
 }
 
-/* Button styling */
-.button {
-  margin-top: 1rem;
-  padding: 12px 24px;
-  background-color: #005bb5;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  align-self: flex-start; /* Button won't stretch full width */
-}
-
 .button:hover {
   background-color: #004494;
 }

@@ -1,16 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./CategoriesList.module.css";
+import categories from "../models/Category";
 
-const categories = [
-  { id: 1, name: "Breakfast", count: 12 },
-  { id: 2, name: "Lunch", count: 25 },
-  { id: 3, name: "Dinner", count: 18 },
-  { id: 4, name: "Dessert", count: 10 },
-  { id: 5, name: "Snacks", count: 8 },
-  { id: 6, name: "Drinks", count: 5 },
-];
+// const categories = [
+//   { id: 1, name: "Breakfast", count: 12 },
+//   { id: 2, name: "Lunch", count: 25 },
+//   { id: 3, name: "Dinner", count: 18 },
+//   { id: 4, name: "Dessert", count: 10 },
+//   { id: 5, name: "Snacks", count: 8 },
+//   { id: 6, name: "Drinks", count: 5 },
+// ];
 
 const CategoriesList = () => {
+  const navigate = useNavigate();
+
   return (
     <div className={"content-container"}>
       <h1 className={styles.title}>Categories</h1>
@@ -27,6 +30,14 @@ const CategoriesList = () => {
           </Link>
         ))}
       </div>
+      <button
+        className={"button"}
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        Back
+      </button>
     </div>
   );
 };

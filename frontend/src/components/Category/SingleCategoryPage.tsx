@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import RecipeCard from "../RecipeCard/RecipeCard";
 import mockRecipes from "../../models/MockRecipe";
 import styles from "./SingleCategoryPage.module.css";
@@ -9,6 +9,7 @@ const recipes = [...mockRecipes];
 const SingleCategoryPage = () => {
   const { name } = useParams<{ name: string }>();
   const categoryName = name ? decodeURIComponent(name) : "Unkown";
+  const navigate = useNavigate();
 
   return (
     <div className={"content-container"}>
@@ -26,6 +27,14 @@ const SingleCategoryPage = () => {
           </Link>
         ))}
       </div>
+      {/* <button
+        className={"button"}
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        Back
+      </button> */}
     </div>
   );
 };

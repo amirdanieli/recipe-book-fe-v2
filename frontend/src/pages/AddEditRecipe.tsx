@@ -6,13 +6,13 @@ import type { Ingredient } from "../models/Ingredient";
 
 const AddEditRecipe = () => {
   const categories = [
-    //NEED TO FETCH FROM API
-    { id: 1, name: "Breakfast" },
-    { id: 2, name: "Lunch" },
-    { id: 3, name: "Dinner" },
-    { id: 4, name: "Dessert" },
-    { id: 5, name: "Snacks" },
-    { id: 6, name: "Drinks" },
+    // NEED TO FETCH FROM API
+    { id: "c-breakfast", name: "Breakfast" },
+    { id: "c-lunch", name: "Lunch" },
+    { id: "c-dinner", name: "Dinner" },
+    { id: "c-dessert", name: "Dessert" },
+    { id: "c-snacks", name: "Snacks" },
+    { id: "c-drinks", name: "Drinks" },
   ];
 
   const { slug } = useParams<{ slug: string }>();
@@ -257,10 +257,10 @@ const AddEditRecipe = () => {
         </div>
 
         <div className={styles.buttonsContainer}>
-          <button type="submit" className={styles.button}>
+          <button type="submit" className={"button"}>
             {isEditMode ? "Save Changes" : "Create Recipe"}
           </button>
-          <button className={styles.button} onClick={() => navigate(-1)}>
+          <button className={"button"} onClick={() => navigate(-1)}>
             Cancel
           </button>
         </div>
