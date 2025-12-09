@@ -1,9 +1,16 @@
-import { createContext, useState, type ReactNode, useContext } from "react";
+import {
+  createContext,
+  useState,
+  type ReactNode,
+  useContext,
+  useEffect,
+} from "react";
+import { verifySession, logout as apiLogout } from "../services/authService";
 
 interface AuthContextType {
   user: string | null;
-  token: string | null;
   isAdmin: boolean;
+  isLoading: boolean;
   login: (token: string, user: string) => void;
   logout: () => void;
 }
@@ -11,33 +18,44 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<string | null>(() =>
-    localStorage.getItem("user")
-  );
+  const [user, setUser] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [token, setToken] = useState<string | null>(() =>
-    localStorage.getItem("token")
-  );
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        const data = await verifySession();
+        if (data && data.user) {
+          setUser(data.user);
+        }
+      } catch {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const login = (newToken: string, newUser: string) => {
-    localStorage.setItem("token", newToken);
-    localStorage.setItem("user", newUser);
-    setToken(newToken);
+    initAuth();
+  }, []);
+
+  const login = (newUser: string) => {
     setUser(newUser);
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setToken(null);
-    setUser(null);
+  const logout = async () => {
+    try {
+      await apiLogout();
+      setUser(null);
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, token, isAdmin: !!token, login, logout }}
+      value={{ user, isAdmin: !!user, isLoading, login, logout }}
     >
-      {children}
+      {isLoading ? <div>Loading session...</div> : children}
     </AuthContext.Provider>
   );
 };
