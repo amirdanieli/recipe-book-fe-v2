@@ -8,6 +8,7 @@ export interface Recipe {
     ingredients: Ingredient[];
     steps: string[];
     prepTimeMinutes: number;
+    cookTimeMinutes: number;
     prepTimeNote?: string;
     difficulty: "Easy" | "Medium" | "Hard";
     categoryId: string;

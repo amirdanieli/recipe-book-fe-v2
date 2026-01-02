@@ -15,6 +15,10 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           <strong className={styles.label}>Prep time:</strong>
           <span className={styles.value}>{recipe.prepTimeMinutes} min</span>
         </div>
+        <div className={styles.row}>
+          <strong className={styles.label}>Cook time:</strong>
+          <span className={styles.value}>{recipe.cookTimeMinutes} min</span>
+        </div>
       </div>
 
       <p className={styles["truncate-multi-line"]}>{recipe.story}</p>

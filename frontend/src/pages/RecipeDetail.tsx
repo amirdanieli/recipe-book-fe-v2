@@ -73,6 +73,10 @@ const RecipeDetail = () => {
           <strong className={styles.label}>Prep time:</strong>
           <span className={styles.value}>{recipe.prepTimeMinutes} min</span>
         </div>
+        <div className={styles.row}>
+          <strong className={styles.label}>Cook time:</strong>
+          <span className={styles.value}>{recipe.cookTimeMinutes} min</span>
+        </div>
         <div className={styles.storyContainer}>
           <p className={styles.story}>{recipe.story}</p>
         </div>

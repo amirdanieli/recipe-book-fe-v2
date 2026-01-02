@@ -24,6 +24,7 @@ const AddEditRecipe = () => {
   const [category, setCategory] = useState("");
   const [difficulty, setDifficulty] = useState("");
   const [prepTimeMinutes, setPrepTimeMinutes] = useState(0);
+  const [cookTimeMinutes, setCookTimeMinutes] = useState(0);
   const [story, setStory] = useState("");
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [steps, setSteps] = useState<string[]>([]);
@@ -36,6 +37,7 @@ const AddEditRecipe = () => {
         setCategory(recipeToEdit.categoryId);
         setDifficulty(recipeToEdit.difficulty);
         setPrepTimeMinutes(recipeToEdit.prepTimeMinutes);
+        setCookTimeMinutes(recipeToEdit.cookTimeMinutes);
         setStory(recipeToEdit.story);
         setIngredients(recipeToEdit.ingredients);
         setSteps(recipeToEdit.steps);
@@ -54,6 +56,7 @@ const AddEditRecipe = () => {
       categoryId: category,
       difficulty,
       prepTimeMinutes,
+      cookTimeMinutes,
       story,
       ingredients,
       steps,
@@ -158,7 +161,24 @@ const AddEditRecipe = () => {
             type="number"
             className={styles.input}
             value={prepTimeMinutes}
-            onChange={(e) => setPrepTimeMinutes(Number(e.target.value))}
+            min={0}
+            onChange={(e) =>
+              setPrepTimeMinutes(Math.max(0, Number(e.target.value)))
+            }
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Cook Time (minutes):</label>
+          <input
+            type="number"
+            className={styles.input}
+            value={cookTimeMinutes}
+            min={0}
+            onChange={(e) =>
+              setCookTimeMinutes(Math.max(0, Number(e.target.value)))
+            }
             required
           />
         </div>
