@@ -33,12 +33,20 @@ model User {
   recipes  Recipe[]
 }
 
+model Category {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  slug    String   @unique
+  recipes Recipe[]
+}
+
 model Recipe {
   id              String     @id @default(uuid())
   title           String
   slug            String     @unique
   description     String?
   categoryId      String
+  category        Category   @relation(fields: [categoryId], references: [id])
   difficulty      Difficulty
   prepTimeMinutes Int
   prepTimeNote    String?

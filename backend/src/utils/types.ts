@@ -1,6 +1,9 @@
 import { Request } from 'express';
-import { Role } from '@prisma/client';
 
+export enum Role {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+}
 export interface JwtPayload {
   sub: string;
   email: string;

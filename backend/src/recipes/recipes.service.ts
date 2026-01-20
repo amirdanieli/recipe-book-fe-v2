@@ -8,15 +8,19 @@ import { Prisma, Recipe } from '@prisma/client';
 export class RecipesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createRecipeDto: CreateRecipeDto, userId: string): Promise<Recipe> {
+  async create(
+    createRecipeDto: CreateRecipeDto,
+    userId: string,
+  ): Promise<Recipe> {
     const slug = this.generateSlug(createRecipeDto.title);
-    const { ingredients, ...rest } = createRecipeDto;
+    const { ingredients, categoryId, ...rest } = createRecipeDto;
 
     return this.prisma.recipe.create({
       data: {
         ...rest,
         ingredients: ingredients as unknown as Prisma.InputJsonValue,
         slug,
+        category: { connect: { id: categoryId } },
         createdBy: { connect: { id: userId } },
       },
       include: {
@@ -26,12 +30,15 @@ export class RecipesService {
             name: true,
           },
         },
+        category: true,
       },
     });
   }
 
   findAll(category?: string): Promise<Recipe[]> {
-    const where: Prisma.RecipeWhereInput = category ? { categoryId: category } : {};
+    const where: Prisma.RecipeWhereInput = category
+      ? { categoryId: category }
+      : {};
     return this.prisma.recipe.findMany({
       where,
       include: {
@@ -41,6 +48,7 @@ export class RecipesService {
             name: true,
           },
         },
+        category: true,
       },
       orderBy: {
         createdAt: 'desc',
@@ -58,6 +66,7 @@ export class RecipesService {
             name: true,
           },
         },
+        category: true,
       },
     });
     if (!recipe) {
@@ -66,7 +75,10 @@ export class RecipesService {
     return recipe;
   }
 
-  async update(slug: string, updateRecipeDto: UpdateRecipeDto): Promise<Recipe> {
+  async update(
+    slug: string,
+    updateRecipeDto: UpdateRecipeDto,
+  ): Promise<Recipe> {
     const existing = await this.findOne(slug);
 
     const { ingredients, ...rest } = updateRecipeDto;
@@ -90,6 +102,7 @@ export class RecipesService {
             name: true,
           },
         },
+        category: true,
       },
     });
   }
@@ -104,11 +117,15 @@ export class RecipesService {
   }
 
   private generateSlug(title: string): string {
-    return title
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/[\s_-]+/g, '-')
-      .replace(/^-+|-+$/g, '') + '-' + Date.now().toString().slice(-6);
+    return (
+      title
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/[\s_-]+/g, '-')
+        .replace(/^-+|-+$/g, '') +
+      '-' +
+      Date.now().toString().slice(-6)
+    );
   }
 }

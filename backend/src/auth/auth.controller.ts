@@ -11,8 +11,6 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import express from 'express';
 import { AuthGuard } from '@nestjs/passport';
-
-import { Role } from '@prisma/client';
 import { AuthenticatedRequest } from '../utils/types';
 
 @Controller('auth')
