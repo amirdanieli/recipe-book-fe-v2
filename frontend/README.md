@@ -6,8 +6,8 @@ A modern React-based frontend for the Recipe Book application. Built with Vite, 
 
 ## 🚀 Tech Stack
 
-- **Framework**: [React](https://reactjs.org/) + [TypeScript](https://www.typescriptlang.org/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Frontend Tech**: React + Vite
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Routing**: [React Router DOM](https://reactrouter.com/)
 - **State Management**: React Context (Auth)
 - **Styling**: CSS Modules
@@ -72,12 +72,15 @@ The backend **must** enable CORS to allow the frontend to communicate with it.
 
 ## 🏗 Project Structure
 
+- `src/assets/`: Static assets like images and icons.
 - `src/components/`: Reusable UI components (Header, RecipeCard, etc.)
 - `src/context/`: Auth state management.
 - `src/hooks/`: Custom hooks like `useAuth`.
+- `src/models/`: TypeScript interfaces and types.
 - `src/pages/`: Main application views (Home, RecipeDetail, etc.)
 - `src/services/`: API communication layer (`apiClient.ts` and domain services).
-- `src/models/`: TypeScript interfaces and types.
+- `src/styles/`: Global styles and CSS variables.
+- `src/utils/`: Utility functions and shared types.
 
 ---
 
