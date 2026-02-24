@@ -1,0 +1,137 @@
+/* Main form container styling */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Space between form groups */
+  max-width: 600px; /* Prevent form from getting too wide */
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* Wraps the Label + Input pair */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Space between label and input */
+}
+
+.label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Shared style for Inputs, Selects, and Textareas */
+.input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box; /* Ensures padding doesn't expand width */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: #fff;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #005bb5; /* Your theme blue */
+  box-shadow: 0 0 0 3px rgba(0, 91, 181, 0.1);
+}
+
+/* Specific height for textareas */
+textarea.input {
+  min-height: 120px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.button:hover {
+  background-color: #004494;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Ingredients Row Layout */
+.ingredientRow {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Steps Row Layout */
+.stepRow {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start; /* Align to top for textareas */
+}
+
+.stepNumber {
+  font-weight: bold;
+  padding-top: 10px; /* Align with textarea text */
+  min-width: 20px;
+}
+
+/* Smaller inputs for Qty/Unit */
+.inputSmall {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 80px; /* Fixed small width */
+  flex-shrink: 0; /* Don't shrink */
+}
+
+/* Buttons */
+.addButton {
+  background-color: transparent;
+  border: 2px dashed #ccc;
+  color: #666;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 5px;
+  transition: all 0.2s;
+}
+
+.addButton:hover {
+  border-color: #005bb5;
+  color: #005bb5;
+  background-color: #f0f8ff;
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  color: #ff4d4f;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: color 0.2s;
+}
+
+.removeButton:hover {
+  color: #d9363e;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .ingredientRow {
+    flex-wrap: wrap; /* Stack inputs on small screens */
+  }
+  .inputSmall {
+    width: calc(50% - 5px); /* Split width for qty/unit */
+  }
+}

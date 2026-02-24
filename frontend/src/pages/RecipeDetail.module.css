@@ -1,0 +1,129 @@
+.container {
+  flex: 1;
+  width: 100%;
+  margin: 16px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 0;
+}
+
+.split {
+  display: flex;
+  gap: 20%;
+  margin-bottom: 12px;
+}
+
+.left {
+  width: 30%;
+  background-color: #ffffffb5;
+  border-radius: 8px;
+  padding: 12px;
+  box-sizing: border-box;
+  max-height: fit-content;
+}
+
+.right{
+  width: 50%;
+  border-right: 1.3px;
+  max-height: 50px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.label {
+  font-weight: 600;
+  flex: 0 0 auto;
+  margin-right: 6px;
+  color: #444;
+}
+
+.value {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #666;
+}
+
+.storyContainer {
+  display: block;;
+  padding-top: 16px;
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+  line-height: 1;
+
+  width: 75%;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
+}
+
+.story {
+  margin: 0;
+  color: #000000;
+  font-size: 1em;
+  line-height: 1.4;
+  display: block;
+}
+
+.list {
+  margin: 12px 0;
+  padding-left: 1.25rem;
+  color: #213547;
+  line-height: 1.6;
+  display: block;
+  list-style-position: outside;
+  box-sizing: border-box;
+}
+
+.listItem {
+  margin: 0 0 8px 0;
+  word-break: break-word;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+@media (max-width: 800px) {
+  .wrapperContainer {
+    flex-direction: column;
+    height: auto;
+    padding: 12px;
+  }
+
+  .imageContainer {
+    width: 100%;
+    flex: 0 0 auto;
+    height: 40vh; /* visible image area */
+    margin-bottom: 12px;
+  }
+
+  .container {
+    width: 100%;
+    flex: 1 1 auto;
+    height: auto;
+  }
+
+  .storyContainer {
+    width: 100%;
+  }
+
+  .adminControls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  justify-content: flex-end; /* Puts buttons on the right */
+}
+
+.editButton, .deleteButton {
+  padding: 8px
+}
+}
