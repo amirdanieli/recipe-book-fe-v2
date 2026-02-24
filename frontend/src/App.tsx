@@ -9,6 +9,7 @@ import RecipeDetail from "./pages/RecipeDetail";
 import AdminLogin from "./pages/AdminLogin";
 import { AuthProvider } from "./context/AuthContext";
 import RequireAuth from "./components/Auth/RequireAuth";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           </Route>
           <Route path="/admin/login" element={<AdminLogin />} />
         </Routes>
+        <SpeedInsights />
       </AuthProvider>
     </BrowserRouter>
   );
