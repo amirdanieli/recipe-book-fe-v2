@@ -7,6 +7,8 @@ import { getAllCategories } from "../services/categoryService";
 const CategoriesList = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -15,6 +17,9 @@ const CategoriesList = () => {
         setCategories(data);
       } catch (err) {
         console.error("Failed to fetch categories", err);
+        setError("Failed to load categories. Please try again later.");
+      } finally {
+        setLoading(false);
       }
     };
     fetchCategories();
@@ -23,6 +28,8 @@ const CategoriesList = () => {
   return (
     <div className={"content-container"}>
       <h1 className={styles.title}>Categories</h1>
+      {loading && <p>Loading...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <div className={`list ${styles["categories-list"]}`}>
         {categories.map((category) => (
           <Link
