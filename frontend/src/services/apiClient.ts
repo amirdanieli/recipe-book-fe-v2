@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+const BASE_URL = import.meta.env.VITE_API_URL || "https://nasty-karalynn-amir-recipe-book-918b0e0b.koyeb.app/api";
 
 interface RequestOptions extends RequestInit {
   body?: any;
