@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "https://nasty-karalynn-amir-recipe-book-918b0e0b.koyeb.app/api";
+const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 interface RequestOptions extends RequestInit {
   body?: any;
