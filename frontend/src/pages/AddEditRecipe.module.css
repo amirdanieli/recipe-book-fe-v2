@@ -91,6 +91,7 @@ textarea.input {
   font-size: 1rem;
   width: 80px; /* Fixed small width */
   flex-shrink: 0; /* Don't shrink */
+  box-sizing: border-box;
 }
 
 /* Buttons */
@@ -128,10 +129,28 @@ textarea.input {
 
 /* Mobile Responsiveness */
 @media (max-width: 600px) {
+  .form {
+    max-width: 100%;
+    gap: 1rem;
+  }
+  .input,
+  .inputSmall {
+    font-size: 16px; /* Prevent iOS zoom on focus */
+  }
   .ingredientRow {
-    flex-wrap: wrap; /* Stack inputs on small screens */
+    flex-wrap: wrap;
   }
   .inputSmall {
-    width: calc(50% - 5px); /* Split width for qty/unit */
+    width: calc(50% - 5px);
+  }
+  .stepRow {
+    flex-wrap: wrap;
+  }
+  .buttonsContainer {
+    flex-direction: column;
+  }
+  .buttonsContainer .button {
+    width: 100%;
+    text-align: center;
   }
 }

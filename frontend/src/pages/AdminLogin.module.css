@@ -8,6 +8,11 @@
   text-align: center;
 }
 
+.form {
+  width: 100%;
+  max-width: 400px;
+}
+
 .formGroup {
   margin-bottom: 1rem;
 }
@@ -24,6 +29,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
+  box-sizing: border-box;
 }
 
 .submitButton {
@@ -40,4 +46,13 @@
 
 .submitButton:hover {
   background-color: #0056b3;
+}
+
+@media (max-width: 600px) {
+  .form {
+    max-width: 100%;
+  }
+  .input {
+    font-size: 16px; /* Prevent iOS zoom on focus */
+  }
 }

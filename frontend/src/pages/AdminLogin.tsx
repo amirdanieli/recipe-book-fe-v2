@@ -33,7 +33,7 @@ const AdminLogin = () => {
 
       {error && <div className={styles.errorBox}>{error}</div>}
 
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleLogin} className={styles.form}>
         <div className={styles.formGroup}>
           <label className={styles.label}>Email:</label>
           <input

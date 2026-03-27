@@ -39,8 +39,8 @@
 /* Responsive */
 @media (max-width: 900px) {
   .container {
-    width: 80%;
-    margin-left: 10%;
+    width: 90%;
+    margin-left: 5%;
   }
   .list {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -48,16 +48,25 @@
 }
 
 @media (max-width: 600px) {
+  .title {
+    font-size: 1.5rem;
+  }
   .container {
     width: 100%;
     margin-left: 0;
     align-items: center;
     text-align: center;
-    height: calc(100vh - var(--header-height, 110px));
+    height: auto;
+  }
+  .item {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: 200px;
   }
   .list {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 15px;
+    grid-template-columns: 1fr;
+    gap: 12px;
     padding: 8px;
     justify-items: center;
   }
