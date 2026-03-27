@@ -3,6 +3,7 @@ import styles from "./CategoriesList.module.css";
 import { useEffect, useState } from "react";
 import type { Category } from "../models/Category";
 import { getAllCategories } from "../services/categoryService";
+import LoadingSpinner from "../components/Loader/LoadingSpinner";
 
 const CategoriesList = () => {
   const navigate = useNavigate();
@@ -25,10 +26,11 @@ const CategoriesList = () => {
     fetchCategories();
   }, []);
 
+  if (loading) return <LoadingSpinner />;
+
   return (
     <div className={"content-container"}>
       <h1 className={styles.title}>Categories</h1>
-      {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
       <div className={`list ${styles["categories-list"]}`}>
         {categories.map((category) => (

@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import styles from "./AddEditRecipe.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import type { Ingredient } from "../models/Ingredient";
 import { getAllCategories } from "../services/categoryService";
 import {
@@ -10,6 +10,16 @@ import {
 } from "../services/recipeService";
 import type { Category } from "../models/Category";
 import { uploadImage } from "../services/imageService";
+import Toast from "../components/Toast/Toast";
+import LoadingSpinner from "../components/Loader/LoadingSpinner";
+
+interface FieldErrors {
+  title?: string;
+  category?: string;
+  difficulty?: string;
+  ingredients?: string;
+  steps?: string;
+}
 
 const AddEditRecipe = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -28,6 +38,9 @@ const AddEditRecipe = () => {
   const [steps, setSteps] = useState<string[]>([]);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [toastMessage, setToastMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -43,6 +56,7 @@ const AddEditRecipe = () => {
 
   useEffect(() => {
     if (isEditMode && slug) {
+      setIsLoading(true);
       const fetchRecipe = async () => {
         try {
           const recipeToEdit = await getRecipeBySlug(slug);
@@ -58,14 +72,35 @@ const AddEditRecipe = () => {
         } catch (err) {
           console.error("Recipe not found for editing", err);
           navigate("/");
+        } finally {
+          setIsLoading(false);
         }
       };
       fetchRecipe();
     }
   }, [isEditMode, slug, navigate]);
 
+  const validate = useCallback((): boolean => {
+    const errors: FieldErrors = {};
+    if (!title.trim()) errors.title = "Title is required";
+    if (!category) errors.category = "Category is required";
+    if (!difficulty) errors.difficulty = "Difficulty is required";
+    if (ingredients.length === 0)
+      errors.ingredients = "Add at least one ingredient";
+    if (steps.length === 0) errors.steps = "Add at least one step";
+
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      setToastMessage("Some required fields are missing");
+      return false;
+    }
+    return true;
+  }, [title, category, difficulty, ingredients, steps]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validate()) return;
 
     let uploadedImageUrl = imageUrl;
     if (imageFile) {
@@ -81,7 +116,7 @@ const AddEditRecipe = () => {
     const recipeData = {
       title,
       categoryId: category,
-      difficulty: difficulty as any,
+      difficulty: difficulty as "EASY" | "MEDIUM" | "HARD",
       prepTimeMinutes,
       cookTimeMinutes,
       story,
@@ -142,29 +177,46 @@ const AddEditRecipe = () => {
     setSteps(newSteps);
   };
 
+  if (isLoading) return <LoadingSpinner />;
+
   return (
     <div className={"content-container"}>
       <h1>{isEditMode ? "Edit Recipe" : "Add Recipe"}</h1>
+
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          type="error"
+          onClose={() => setToastMessage("")}
+        />
+      )}
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formGroup}>
           <label className={styles.label}>Title:</label>
           <input
             type="text"
-            className={styles.input}
+            className={`${styles.input} ${fieldErrors.title ? styles.inputError : ""}`}
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
+            onChange={(e) => {
+              setTitle(e.target.value);
+              setFieldErrors((p) => ({ ...p, title: undefined }));
+            }}
           />
+          {fieldErrors.title && (
+            <span className={styles.fieldError}>{fieldErrors.title}</span>
+          )}
         </div>
 
         <div className={styles.formGroup}>
           <label className={styles.label}>Category:</label>
           <select
-            className={styles.input}
+            className={`${styles.input} ${fieldErrors.category ? styles.inputError : ""}`}
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            required
+            onChange={(e) => {
+              setCategory(e.target.value);
+              setFieldErrors((p) => ({ ...p, category: undefined }));
+            }}
           >
             <option value="">Select Category</option>
             {categories.map((cat) => (
@@ -173,21 +225,29 @@ const AddEditRecipe = () => {
               </option>
             ))}
           </select>
+          {fieldErrors.category && (
+            <span className={styles.fieldError}>{fieldErrors.category}</span>
+          )}
         </div>
 
         <div className={styles.formGroup}>
           <label className={styles.label}>Difficulty:</label>
           <select
-            className={styles.input}
+            className={`${styles.input} ${fieldErrors.difficulty ? styles.inputError : ""}`}
             value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-            required
+            onChange={(e) => {
+              setDifficulty(e.target.value);
+              setFieldErrors((p) => ({ ...p, difficulty: undefined }));
+            }}
           >
             <option value="">Select Difficulty</option>
             <option value="EASY">Easy</option>
             <option value="MEDIUM">Medium</option>
             <option value="HARD">Hard</option>
           </select>
+          {fieldErrors.difficulty && (
+            <span className={styles.fieldError}>{fieldErrors.difficulty}</span>
+          )}
         </div>
 
         <div className={styles.formGroup}>
@@ -244,7 +304,14 @@ const AddEditRecipe = () => {
         </div>
 
         <div className={styles.section}>
-          <label className={styles.label}>Ingredients:</label>
+          <label
+            className={`${styles.label} ${fieldErrors.ingredients ? styles.labelError : ""}`}
+          >
+            Ingredients:
+          </label>
+          {fieldErrors.ingredients && (
+            <span className={styles.fieldError}>{fieldErrors.ingredients}</span>
+          )}
           {ingredients.map((ingredient, index) => (
             <div key={index} className={styles.ingredientRow}>
               <input
@@ -273,7 +340,6 @@ const AddEditRecipe = () => {
                 onChange={(e) =>
                   handleIngredientChange(index, "name", e.target.value)
                 }
-                required
               />
               <button
                 type="button"
@@ -288,14 +354,24 @@ const AddEditRecipe = () => {
           <button
             type="button"
             className={styles.addButton}
-            onClick={handleAddIngredient}
+            onClick={() => {
+              handleAddIngredient();
+              setFieldErrors((p) => ({ ...p, ingredients: undefined }));
+            }}
           >
             + Add Ingredient
           </button>
         </div>
 
         <div className={styles.section}>
-          <label className={styles.label}>Steps:</label>
+          <label
+            className={`${styles.label} ${fieldErrors.steps ? styles.labelError : ""}`}
+          >
+            Steps:
+          </label>
+          {fieldErrors.steps && (
+            <span className={styles.fieldError}>{fieldErrors.steps}</span>
+          )}
           {steps.map((step, index) => (
             <div key={index} className={styles.stepRow}>
               <span className={styles.stepNumber}>{index + 1}.</span>
@@ -305,7 +381,6 @@ const AddEditRecipe = () => {
                 onChange={(e) => handleStepChange(index, e.target.value)}
                 placeholder={`Describe step ${index + 1}...`}
                 rows={2}
-                required
               />
               <button
                 type="button"
@@ -320,7 +395,10 @@ const AddEditRecipe = () => {
           <button
             type="button"
             className={styles.addButton}
-            onClick={handleAddStep}
+            onClick={() => {
+              handleAddStep();
+              setFieldErrors((p) => ({ ...p, steps: undefined }));
+            }}
           >
             + Add Step
           </button>

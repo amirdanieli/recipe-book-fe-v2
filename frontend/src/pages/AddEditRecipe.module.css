@@ -127,6 +127,22 @@ textarea.input {
   color: #d9363e;
 }
 
+/* Validation error styles */
+.inputError {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.15);
+}
+
+.fieldError {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+.labelError {
+  color: #dc3545;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 600px) {
   .form {
