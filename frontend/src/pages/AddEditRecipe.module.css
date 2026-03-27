@@ -67,7 +67,8 @@ textarea.input {
 .ingredientRow {
   display: flex;
   gap: 10px;
-  align-items: center;
+  align-items: flex-start;
+  position: relative;
 }
 
 /* Steps Row Layout */
@@ -155,6 +156,13 @@ textarea.input {
   }
   .ingredientRow {
     flex-wrap: wrap;
+    position: relative;
+    padding-right: 30px;
+  }
+  .ingredientRow .removeButton {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
   .inputSmall {
     width: calc(50% - 5px);

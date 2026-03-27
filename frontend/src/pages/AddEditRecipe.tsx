@@ -85,9 +85,16 @@ const AddEditRecipe = () => {
     if (!title.trim()) errors.title = "Title is required";
     if (!category) errors.category = "Category is required";
     if (!difficulty) errors.difficulty = "Difficulty is required";
-    if (ingredients.length === 0)
+    if (ingredients.length === 0) {
       errors.ingredients = "Add at least one ingredient";
-    if (steps.length === 0) errors.steps = "Add at least one step";
+    } else if (ingredients.some((ing) => !ing.name.trim())) {
+      errors.ingredients = "All ingredients must have a name";
+    }
+    if (steps.length === 0) {
+      errors.steps = "Add at least one step";
+    } else if (steps.some((s) => !s.trim())) {
+      errors.steps = "All steps must have a description";
+    }
 
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) {
@@ -126,20 +133,18 @@ const AddEditRecipe = () => {
     };
 
     try {
+      let savedRecipe;
       if (isEditMode && slug) {
-        await updateRecipe(slug, recipeData);
+        savedRecipe = await updateRecipe(slug, recipeData);
       } else {
-        await createRecipe(recipeData);
+        savedRecipe = await createRecipe(recipeData);
       }
 
-      const selectedCategory = categories.find((cat) => cat.id === category);
-      if (selectedCategory?.slug) {
-        navigate(`/categories/${selectedCategory.slug}`);
-      } else {
-        navigate("/");
-      }
+      navigate(`/recipes/${savedRecipe.slug}`);
     } catch (err) {
-      console.error("Failed to save recipe", err);
+      const message =
+        err instanceof Error ? err.message : "Failed to save recipe";
+      setToastMessage(message);
     }
   };
 
