@@ -6,6 +6,7 @@ import { getErrorMessage, isNotFoundError } from "../../services/apiClient";
 import { getAllCategories } from "../../services/categoryService";
 import { deleteRecipe as apiDeleteRecipe, getRecipeBySlug } from "../../services/recipeService";
 import { DIFFICULTY_LABELS, formatMinutes } from "../../utils/recipeFormat";
+import { stripRichText } from "../../utils/richText";
 import type { RecipeDetailLogic, RecipeMetaItem } from "./RecipeDetailTypes";
 
 export const useRecipeDetailLogic = (slug: string | undefined): RecipeDetailLogic => {
@@ -27,6 +28,7 @@ export const useRecipeDetailLogic = (slug: string | undefined): RecipeDetailLogi
   const { data, error, isLoading, reload } = useAsyncData(slug ? fetchRecipePage : null);
 
   const recipe = data?.recipe ?? null;
+  const plainTitle = recipe ? stripRichText(recipe.title) : "";
   const category = useMemo(
     () => data?.categories.find((c) => String(c.id) === String(data.recipe.categoryId)),
     [data],
@@ -49,7 +51,7 @@ export const useRecipeDetailLogic = (slug: string | undefined): RecipeDetailLogi
 
   const deleteRecipe = useCallback(async () => {
     if (!recipe || isDeleting) return;
-    if (!window.confirm(`Are you sure you want to delete "${recipe.title}"?`)) return;
+    if (!window.confirm(`Are you sure you want to delete "${plainTitle}"?`)) return;
 
     setIsDeleting(true);
     try {
@@ -59,7 +61,7 @@ export const useRecipeDetailLogic = (slug: string | undefined): RecipeDetailLogi
       setToastMessage(getErrorMessage(err, "Failed to delete the recipe."));
       setIsDeleting(false);
     }
-  }, [recipe, isDeleting, navigate, backHref]);
+  }, [recipe, plainTitle, isDeleting, navigate, backHref]);
 
   const handleImageError = useCallback(() => {
     setFailedImageUrl(recipe?.imageUrl ?? null);
@@ -73,6 +75,7 @@ export const useRecipeDetailLogic = (slug: string | undefined): RecipeDetailLogi
   return {
     state: {
       recipe,
+      plainTitle,
       isLoading,
       isNotFound,
       errorMessage:

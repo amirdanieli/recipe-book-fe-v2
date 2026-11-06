@@ -7,6 +7,8 @@ export interface RecipeMetaItem {
 
 export interface RecipeDetailState {
   recipe: Recipe | null;
+  /** Title without formatting tags (alt text, dialogs). */
+  plainTitle: string;
   isLoading: boolean;
   isNotFound: boolean;
   errorMessage: string | null;

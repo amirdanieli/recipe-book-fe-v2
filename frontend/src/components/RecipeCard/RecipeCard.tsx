@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import RichText from "../RichText/RichText";
 import styles from "./RecipeCard.module.css";
 import { useRecipeCardLogic } from "./RecipeCardLogic";
 import type { RecipeCardProps } from "./RecipeCardTypes";
@@ -28,7 +29,9 @@ const RecipeCard = (props: RecipeCardProps) => {
       </div>
 
       <div className={styles.body}>
-        <h2 className={styles.title}>{state.title}</h2>
+        <h2 className={styles.title}>
+          <RichText text={state.title} />
+        </h2>
 
         <dl className={styles.times}>
           <div className={styles.time}>
@@ -41,7 +44,11 @@ const RecipeCard = (props: RecipeCardProps) => {
           </div>
         </dl>
 
-        {state.story && <p className={styles.story}>{state.story}</p>}
+        {state.story && (
+          <p className={styles.story}>
+            <RichText text={state.story} />
+          </p>
+        )}
       </div>
     </Link>
   );

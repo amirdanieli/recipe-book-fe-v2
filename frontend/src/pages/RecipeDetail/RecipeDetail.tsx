@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import RichText from "../../components/RichText/RichText";
 import Toast from "../../components/Toast/Toast";
 import styles from "./RecipeDetail.module.css";
 import { useRecipeDetailLogic } from "./RecipeDetailLogic";
@@ -64,7 +65,9 @@ const RecipeDetail = () => {
 
       <article className={styles.article}>
         <header className={styles.header}>
-          <h1 className="page-title">{recipe.title}</h1>
+          <h1 className="page-title">
+            <RichText text={recipe.title} />
+          </h1>
           <ul className={styles.meta}>
             {state.difficulty && (
               <li className={`${styles.pill} ${styles[state.difficulty]}`}>
@@ -82,13 +85,17 @@ const RecipeDetail = () => {
         {state.imageUrl && (
           <img
             src={state.imageUrl}
-            alt={recipe.title}
+            alt={state.plainTitle}
             className={styles.image}
             onError={actions.handleImageError}
           />
         )}
 
-        {recipe.story && <blockquote className={styles.story}>{recipe.story}</blockquote>}
+        {recipe.story && (
+          <blockquote className={styles.story}>
+            <RichText text={recipe.story} />
+          </blockquote>
+        )}
 
         <div className={styles.split}>
           <section className={`${styles.panel} ${styles.ingredients}`}>
@@ -101,7 +108,9 @@ const RecipeDetail = () => {
                       {[ing.quantity, ing.unit].filter(Boolean).join(" ")}
                     </span>
                   )}
-                  <span>{ing.name}</span>
+                  <span>
+                    <RichText text={ing.name} />
+                  </span>
                 </li>
               ))}
             </ul>
@@ -111,7 +120,9 @@ const RecipeDetail = () => {
             <h2 className={styles.panelTitle}>Steps</h2>
             <ol className={styles.stepList}>
               {recipe.steps.map((step, index) => (
-                <li key={index}>{step}</li>
+                <li key={index}>
+                  <RichText text={step} />
+                </li>
               ))}
             </ol>
           </section>
