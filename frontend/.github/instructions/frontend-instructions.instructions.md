@@ -35,7 +35,7 @@ These instructions guide Copilot for frontend development in the Recipe Book pro
 ## Component & Project Structure
 
 - **Layout**: Pages in `src/pages` or `src/app`, components in `src/components`, hooks in `src/hooks`, services in `src/services`, and types in `src/utils`.
-- **Components**: Keep components small and focused. Export typed props interfaces for each component.
+- **Components**: Keep components small and focused. Every component gets its own folder with `X.tsx` (rendering only), `XLogic.ts` (a `useXLogic()` hook returning `{ state, actions }`) and `XTypes.ts` (`XState`, `XActions`, `XLogic`, and `XProps` if needed). See the frontend README.
 - **Hooks**: Encapsulate business logic into reusable hooks (`useRecipes`, `useAuth`, `useUpload`).
 
 ## Development Patterns

@@ -1,6 +1,6 @@
 import { apiClient } from "./apiClient";
 
-export const uploadImage = async (file: File): Promise<{ url: string }> => {
+export const uploadImage = (file: File): Promise<{ url: string }> => {
   const formData = new FormData();
   formData.append("image", file);
 

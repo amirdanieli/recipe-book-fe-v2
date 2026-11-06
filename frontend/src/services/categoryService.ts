@@ -1,30 +1,23 @@
 import type { Category } from "../models/Category";
 import { apiClient } from "./apiClient";
 
-export const getAllCategories = async (): Promise<Category[]> => {
-  return apiClient<Category[]>("/categories");
-};
+export const getAllCategories = (): Promise<Category[]> =>
+  apiClient<Category[]>("/categories");
 
-export const getCategoryByIdOrSlug = async (idOrSlug: string): Promise<Category> => {
-  return apiClient<Category>(`/categories/${idOrSlug}`);
-};
+export const getCategoryByIdOrSlug = (idOrSlug: string): Promise<Category> =>
+  apiClient<Category>(`/categories/${encodeURIComponent(idOrSlug)}`);
 
-export const createCategory = async (categoryData: Partial<Category>): Promise<Category> => {
-  return apiClient<Category>("/categories", {
-    method: "POST",
-    body: categoryData,
-  });
-};
+export const createCategory = (data: Pick<Category, "name">): Promise<Category> =>
+  apiClient<Category>("/categories", { method: "POST", body: data });
 
-export const updateCategory = async (id: string, categoryData: Partial<Category>): Promise<Category> => {
-  return apiClient<Category>(`/categories/${id}`, {
+export const updateCategory = (
+  id: string,
+  data: Partial<Pick<Category, "name">>,
+): Promise<Category> =>
+  apiClient<Category>(`/categories/${encodeURIComponent(id)}`, {
     method: "PUT",
-    body: categoryData,
+    body: data,
   });
-};
 
-export const deleteCategory = async (id: string): Promise<void> => {
-  return apiClient(`/categories/${id}`, {
-    method: "DELETE",
-  });
-};
+export const deleteCategory = (id: string): Promise<void> =>
+  apiClient<void>(`/categories/${encodeURIComponent(id)}`, { method: "DELETE" });
