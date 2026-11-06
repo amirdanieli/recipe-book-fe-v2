@@ -1,59 +1,54 @@
-import { Link } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { Link, NavLink } from "react-router-dom";
 import styles from "./Header.module.css";
-import { useState } from "react";
+import { useHeaderLogic } from "./HeaderLogic";
 
 const Header = () => {
-  const { isAdmin, logout } = useAuth();
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const closeMenu = () => setMenuOpen(false);
+  const { state, actions } = useHeaderLogic();
 
   return (
-    <header className={styles.container}>
-      <div className={styles.titleRow}>
-        <h1>
-          <Link to="/" className={styles.title} onClick={closeMenu}>
-            Danieli's Recipe Book
-          </Link>
-        </h1>
+    <header className={styles.header}>
+      <div className={styles.inner}>
+        <Link to="/" className={styles.brand} onClick={actions.closeMenu}>
+          <img src="/favicon.svg" alt="" className={styles.logo} />
+          <span>Danieli's Recipe Book</span>
+        </Link>
+
         <button
+          type="button"
           className={styles.hamburger}
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle navigation menu"
-          aria-expanded={menuOpen}
+          onClick={actions.toggleMenu}
+          aria-label={state.isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={state.isMenuOpen}
+          aria-controls="main-nav"
         >
-          {menuOpen ? "✕" : "☰"}
+          {state.isMenuOpen ? "✕" : "☰"}
         </button>
+
+        <nav
+          id="main-nav"
+          className={`${styles.nav} ${state.isMenuOpen ? styles.open : ""}`}
+          aria-label="Main"
+        >
+          {state.navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === "/"}
+              className={({ isActive }) =>
+                `${styles.link} ${isActive ? styles.active : ""}`
+              }
+              onClick={actions.closeMenu}
+            >
+              {item.label}
+            </NavLink>
+          ))}
+          {state.canLogout && (
+            <button type="button" className={styles.logout} onClick={actions.logout}>
+              Logout
+            </button>
+          )}
+        </nav>
       </div>
-      <nav className={`${styles.nav} ${menuOpen ? styles.open : ""}`}>
-        <Link className={styles.link} to="/" onClick={closeMenu}>
-          Home
-        </Link>
-        <Link className={styles.link} to="/categories" onClick={closeMenu}>
-          Categories
-        </Link>
-        {isAdmin && (
-          <Link className={styles.link} to="/add" onClick={closeMenu}>
-            Add Recipe
-          </Link>
-        )}
-        {!isAdmin && (
-          <Link className={styles.link} to="/admin/login" onClick={closeMenu}>
-            Admin Login
-          </Link>
-        )}
-        {isAdmin && (
-          <button
-            onClick={() => {
-              logout();
-              closeMenu();
-            }}
-          >
-            Logout
-          </button>
-        )}
-      </nav>
     </header>
   );
 };

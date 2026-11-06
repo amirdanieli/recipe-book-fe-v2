@@ -35,6 +35,34 @@ A modern React-based frontend for the Recipe Book application. Built with Vite, 
 
 ---
 
+## 🧱 Component Structure
+
+Every component lives in its own folder with three files (plus an optional CSS module):
+
+```
+src/pages/SingleCategoryPage/
+├── SingleCategoryPage.tsx        # View: rendering only
+├── SingleCategoryPageLogic.ts    # useSingleCategoryPageLogic(params) -> { state, actions }
+├── SingleCategoryPageTypes.ts    # SingleCategoryPageState / Actions / Logic (+ Props)
+└── SingleCategoryPage.module.css
+```
+
+- **View (`X.tsx`)**: calls `useXLogic(...)` and renders from `state`, wiring events to `actions`. No `useState`, `useEffect` or service calls.
+- **Logic (`XLogic.ts`)**: the custom hook. It owns all state, effects, data fetching and handlers, and returns `{ state, actions }`.
+- **Types (`XTypes.ts`)**: `XState` (everything the view reads), `XActions` (every function the view calls) and `XLogic = { state: XState; actions: XActions }`.
+
+Route params are read in the view with `useParams()` and passed to the hook (`useSingleCategoryPageLogic(slug)`).
+
+Shared building blocks:
+
+- `hooks/useAsyncData.ts`: loading/error/reload for a fetcher. It ignores stale responses.
+- `hooks/useAuth.ts`: `{ state: { user, isAdmin, isLoading }, actions: { login, logout } }`.
+- `services/apiClient.ts`: `fetch` wrapper that throws `ApiError` (with `status`) on non-2xx responses.
+- `utils/recipeFormat.ts`: difficulty labels and time formatting.
+- `index.css`: theme tokens (`--color-*`, `--radius-*`, `--shadow-*`) and global helpers (`.content-container`, `.page-title`, `.button`, `.status-message`, `.card-grid`).
+
+---
+
 ## 🔗 Backend Connection (Critical Info for B.E)
 
 This section outlines what the backend team needs to know and configure for successful integration.

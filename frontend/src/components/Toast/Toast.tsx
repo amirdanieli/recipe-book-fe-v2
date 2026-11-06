@@ -1,25 +1,23 @@
-import { useEffect } from "react";
 import styles from "./Toast.module.css";
+import { useToastLogic } from "./ToastLogic";
+import type { ToastProps } from "./ToastTypes";
 
-interface ToastProps {
-  message: string;
-  type?: "error" | "success";
-  onClose: () => void;
-  duration?: number;
-}
+const Toast = (props: ToastProps) => {
+  const { state, actions } = useToastLogic(props);
 
-const Toast = ({
-  message,
-  type = "error",
-  onClose,
-  duration = 3000,
-}: ToastProps) => {
-  useEffect(() => {
-    const timer = setTimeout(onClose, duration);
-    return () => clearTimeout(timer);
-  }, [onClose, duration]);
-
-  return <div className={`${styles.toast} ${styles[type]}`}>{message}</div>;
+  return (
+    <div className={`${styles.toast} ${styles[state.type]}`} role={state.role}>
+      <span className={styles.message}>{state.message}</span>
+      <button
+        type="button"
+        className={styles.close}
+        onClick={actions.close}
+        aria-label="Dismiss notification"
+      >
+        ✕
+      </button>
+    </div>
+  );
 };
 
 export default Toast;

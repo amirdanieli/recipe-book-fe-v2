@@ -1,32 +1,23 @@
-import { type Recipe } from "../models/Recipe";
+import type { Recipe, RecipeInput } from "../models/Recipe";
 import { apiClient } from "./apiClient";
 
-export const getAllRecipes = async (category?: string): Promise<Recipe[]> => {
-  const endpoint = category ? `/recipes?category=${category}` : "/recipes";
-  return apiClient<Recipe[]>(endpoint);
+/** @param category optional category slug or id to filter by */
+export const getAllRecipes = (category?: string): Promise<Recipe[]> => {
+  const query = category ? `?${new URLSearchParams({ category })}` : "";
+  return apiClient<Recipe[]>(`/recipes${query}`);
 };
 
+export const getRecipeBySlug = (slug: string): Promise<Recipe> =>
+  apiClient<Recipe>(`/recipes/${encodeURIComponent(slug)}`);
 
-export const getRecipeBySlug = async (slug: string): Promise<Recipe> => {
-  return apiClient<Recipe>(`/recipes/${slug}`);
-};
+export const createRecipe = (data: RecipeInput): Promise<Recipe> =>
+  apiClient<Recipe>("/recipes", { method: "POST", body: data });
 
-export const createRecipe = async (recipeData: Partial<Recipe>): Promise<Recipe> => {
-  return apiClient<Recipe>("/recipes", {
-    method: "POST",
-    body: recipeData,
-  });
-};
-
-export const updateRecipe = async (slug: string, recipeData: Partial<Recipe>): Promise<Recipe> => {
-  return apiClient<Recipe>(`/recipes/${slug}`, {
+export const updateRecipe = (slug: string, data: Partial<RecipeInput>): Promise<Recipe> =>
+  apiClient<Recipe>(`/recipes/${encodeURIComponent(slug)}`, {
     method: "PUT",
-    body: recipeData,
+    body: data,
   });
-};
 
-export const deleteRecipe = async (slug: string): Promise<void> => {
-  return apiClient(`/recipes/${slug}`, {
-    method: "DELETE",
-  });
-};
+export const deleteRecipe = (slug: string): Promise<void> =>
+  apiClient<void>(`/recipes/${encodeURIComponent(slug)}`, { method: "DELETE" });

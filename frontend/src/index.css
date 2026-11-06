@@ -1,178 +1,334 @@
+/* ==========================================================================
+   Theme tokens
+   ========================================================================== */
 :root {
-  /* header height variable defaults to desktop header height from Header.module.css */
-  --header-height: 110px;
+  /* Brand – the existing blue, plus a warm coral sampled from bg image */
+  --color-primary: #005bb5;
+  --color-primary-hover: #004494;
+  --color-primary-soft: #e8f1fb;
+  --color-accent: #e4572e;
+  --color-accent-soft: #fdece6;
 
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* Neutrals */
+  --color-heading: #1f2d3a;
+  --color-text: #2b3a48;
+  --color-text-muted: #5f6b76;
+  --color-border: #e2e6ea;
+  --color-surface: #ffffff;
+  --color-surface-glass: rgba(255, 255, 255, 0.86);
+  /* Matches the off-white of bg image so edges never show a seam */
+  --color-page: #eef2f2;
+
+  /* Feedback */
+  --color-danger: #c62f3b;
+  --color-danger-hover: #a8222d;
+  --color-danger-soft: #fbe9eb;
+  --color-success: #2e8540;
+
+  /* Shape & depth */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(15, 30, 45, 0.06), 0 2px 8px rgba(15, 30, 45, 0.04);
+  --shadow-md: 0 6px 16px rgba(15, 30, 45, 0.1);
+  --shadow-lg: 0 14px 30px rgba(15, 30, 45, 0.14);
+
+  /* Layout */
+  --header-height: 72px;
+  /* Desktop content sits to the right of the fruit in the background */
+  --content-offset: 40%;
+
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  color: var(--color-text);
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* The design is light-only: without this, dark-mode browsers rendered
+     near-white text on top of the white background image. */
+  color-scheme: light;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  --card-width: 225px;
-  --card-height: 260px;
-  --card-gap-x: 20px;
-  --card-gap-y: 24px;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-html, body, #root {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+html {
+  background-color: var(--color-page);
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-
-  /* push content below the fixed header */
-  padding-top: var(--header-height);
-
-  background-image: url('/bg.jpg');
-  background-repeat: no-repeat;
-  background-position: center calc(var(--header-height));
-  background-size: cover;
-  background-attachment: fixed;
-  background-color: #ffffff;
-  overflow-x: hidden;
-  overflow-y: auto;
+  min-height: 100dvh;
 }
 
-.content-container {
-  height: 80%;
-  overflow: auto;
-  margin-left: 40%;
-  margin-right: 1%;
+/* ==========================================================================
+   Background
+   A fixed, viewport-sized layer instead of `background-attachment: fixed`
+   on <body>: it never "runs out" on long pages, works on iOS Safari (which
+   ignores background-attachment: fixed), and is never resized by content.
+   ========================================================================== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--color-page);
+  background-image: url("/bg.jpg");
+  background-image: image-set(url("/bg.webp") type("image/webp"), url("/bg.jpg") type("image/jpeg"));
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: cover;
+}
+
+#root {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  text-align: left;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
+main {
+  flex: 1;
+}
+
+/* ==========================================================================
+   Base elements
+   ========================================================================== */
+h1,
+h2,
+h3 {
+  color: var(--color-heading);
+  line-height: 1.2;
+}
+
+a {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(0, 91, 181, 0.45);
+  outline-offset: 2px;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ==========================================================================
+   Layout helpers
+   ========================================================================== */
+.content-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: auto;
+  max-width: 1000px;
+  margin-left: var(--content-offset);
+  margin-right: 2rem;
+  padding: 2rem 0 3rem;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.page-subtitle {
+  margin: -0.75rem 0 0;
+  color: var(--color-text-muted);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.back-link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* Friendly panel for loading errors, empty lists, "not found", etc. */
+.status-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  background: var(--color-surface-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-text-muted);
+}
+
+.status-message p {
+  margin: 0;
+}
+
+.status-message__icon {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.status-message__icon {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.status-message--error {
+  color: var(--color-danger);
+  border-color: rgba(198, 47, 59, 0.25);
+  background: rgba(251, 233, 235, 0.92);
+}
+
+/* ==========================================================================
+   Buttons (usable on <button> and <a>)
+   ========================================================================== */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button:hover {
+  background-color: var(--color-primary-hover);
+  color: #fff;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button--secondary {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.button--secondary:hover {
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+}
+
+.button--danger {
+  background-color: var(--color-danger);
+}
+
+.button--danger:hover {
+  background-color: var(--color-danger-hover);
+}
+
+.button--small {
+  padding: 0.45rem 0.9rem;
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 1200px) {
+  :root {
+    --content-offset: 36%;
+  }
+}
+
+/* Below this width the content overlaps the fruit, so the background is
+   softened with a white wash to keep text readable. */
 @media (max-width: 900px) {
   :root {
     --header-height: 60px;
   }
 
+  body::before {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+      url("/bg.jpg");
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+      image-set(url("/bg.webp") type("image/webp"), url("/bg.jpg") type("image/jpeg"));
+  }
+
   .content-container {
-    margin-left: 5%;
-    margin-right: 5%;
-    height: auto;
-    min-height: calc(100vh - var(--header-height));
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 2.5rem;
+    max-width: 760px;
   }
 }
 
 @media (max-width: 600px) {
   .content-container {
-    margin-left: 0;
-    margin-right: 0;
-    padding: 0 12px;
-    height: auto;
-    min-height: calc(100vh - var(--header-height));
-    box-sizing: border-box;
+    padding: 1.25rem 1rem 2rem;
+    gap: 1.25rem;
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
   }
 }
 
-.button {
-  margin-top: 1rem;
-  padding: 12px 24px;
-  background-color: #005bb5;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  align-self: flex-start;
-}
-
-.list {
-  /* flex: 1; */
-  overflow-y: auto;
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: var(--card-gap-y);
-  column-gap: var(--card-gap-x);
-  padding: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  justify-content: center;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
-
-@media (max-width: 600px) {
-  :root {
-    --header-height: 56px;
-    --card-width: 100%;
-    --card-height: auto;
-  }
-
-  h1 {
-    font-size: 2rem;
-  }
-
-  .list {
-    padding: 8px;
-    gap: 12px;
-  }
-
-  .button {
-    width: 100%;
-    text-align: center;
-  }
-}
-
