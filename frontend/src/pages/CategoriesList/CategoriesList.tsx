@@ -33,7 +33,9 @@ const CategoriesList = () => {
           {state.categories.map((category) => (
             <Link key={category.id} to={category.href} className={styles.item}>
               <h2 className={styles.cardTitle}>{category.name}</h2>
-              <span className={styles.cardCount}>{category.countLabel}</span>
+              {category.countLabel && (
+                <span className={styles.cardCount}>{category.countLabel}</span>
+              )}
             </Link>
           ))}
         </div>

@@ -15,5 +15,5 @@ export const formatMinutes = (minutes: number): string => {
 };
 
 /** 1 -> "1 recipe", 3 -> "3 recipes" */
-export const formatRecipeCount = (count = 0): string =>
+export const formatRecipeCount = (count: number): string =>
   `${count} ${count === 1 ? "recipe" : "recipes"}`;

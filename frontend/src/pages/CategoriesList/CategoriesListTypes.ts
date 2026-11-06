@@ -2,7 +2,8 @@ export interface CategoryItem {
   id: string;
   name: string;
   href: string;
-  countLabel: string;
+  /** Null when the API doesn't send a recipe count. */
+  countLabel: string | null;
 }
 
 export interface CategoriesListState {

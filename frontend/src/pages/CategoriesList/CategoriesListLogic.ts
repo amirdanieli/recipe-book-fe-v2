@@ -13,7 +13,9 @@ export const useCategoriesListLogic = (): CategoriesListLogic => {
         id: category.id,
         name: category.name,
         href: `/categories/${category.slug}`,
-        countLabel: formatRecipeCount(category.count),
+        // Never show a made-up "0 recipes" when the count is missing.
+        countLabel:
+          typeof category.count === "number" ? formatRecipeCount(category.count) : null,
       })),
     [data],
   );
