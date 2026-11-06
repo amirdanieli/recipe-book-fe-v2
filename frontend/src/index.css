@@ -67,7 +67,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  min-height: 100dvh;
+  min-height: 100svh;
 }
 
 /* ==========================================================================
@@ -75,13 +75,26 @@ body {
    A fixed, viewport-sized layer instead of `background-attachment: fixed`
    on <body>: it never "runs out" on long pages, works on iOS Safari (which
    ignores background-attachment: fixed), and is never resized by content.
+
+   Sized to the *largest* viewport height (lvh) rather than pinned to all
+   four edges: on phones the address bar collapses when scrolling starts,
+   which changes the visible height. With `inset: 0` the layer resized and
+   `background-size: cover` re-scaled the photo, making it jump/zoom.
+   A constant height keeps the image perfectly still.
    ========================================================================== */
 body::before {
   content: "";
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* fallback; equals the large viewport on mobile browsers */
+  height: 100lvh;
   z-index: -1;
   pointer-events: none;
+  /* Own compositor layer, so scrolling never repaints the photo */
+  transform: translateZ(0);
+  will-change: transform;
   background-color: var(--color-page);
   background-image: url("/bg.jpg");
   background-image: image-set(url("/bg.webp") type("image/webp"), url("/bg.jpg") type("image/jpeg"));
@@ -94,7 +107,7 @@ body::before {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  min-height: 100dvh;
+  min-height: 100svh;
 }
 
 main {
